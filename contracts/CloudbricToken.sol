@@ -7,6 +7,8 @@ import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
 
 contract CloudbricToken is StandardToken, BurnableToken, Ownable {
+    using SafeMath for uint256;
+
     string public constant symbol = "CLB";
     string public constant name = "Cloudbric Token";
     uint8 public constant decimals = 18;
