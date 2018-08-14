@@ -1,6 +1,6 @@
 
-const CloudbricToken = artifacts.require("CloudbricToken.sol");
-const CloudbricTokenSale = artifacts.require("CloudbricTokenSale.sol");
+const CloudbricToken = artifacts.require("Cloudbric.sol");
+const CloudbricTokenSale = artifacts.require("CloudbricSale.sol");
 
 contract("Cloudbric Token Sale deploy test", (accounts) => {
   const owner = accounts[0];
