@@ -6,11 +6,11 @@ import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
 
-contract CloudbricToken is StandardToken, BurnableToken, Ownable {
+contract Cloudbric is StandardToken, BurnableToken, Ownable {
     using SafeMath for uint256;
 
     string public constant symbol = "CLB";
-    string public constant name = "Cloudbric Token";
+    string public constant name = "Cloudbric";
     uint8 public constant decimals = 18;
     uint256 public constant INITIAL_SUPPLY = 1000000000 * (10 ** uint256(decimals));
     uint256 public constant TOKEN_SALE_ALLOWANCE = 540000000 * (10 ** uint256(decimals));
@@ -32,13 +32,13 @@ contract CloudbricToken is StandardToken, BurnableToken, Ownable {
      *
      * Permissions when transferEnabled is false :
      *              ContractOwner    Admin    SaleContract    Others
-     * transfer            x           x           x            x
-     * transferFrom        x           v           v            x
+     * transfer            x           v            v           x
+     * transferFrom        x           v            v           x
      *
      * Permissions when transferEnabled is true :
      *              ContractOwner    Admin    SaleContract    Others
-     * transfer            v           x            x           v
-     * transferFrom        v           x            x           v
+     * transfer            v           v            v           v
+     * transferFrom        v           v            v           v
      *
      */
 
@@ -78,11 +78,11 @@ contract CloudbricToken is StandardToken, BurnableToken, Ownable {
         _;
     }
     /*
-     * The constructor of CloudbricToken contract
+     * The constructor of Cloudbric contract
      *
      * @param _adminAddr: Address of token administrator
      */
-    function CloudbricToken(address _adminAddr) public {
+    function Cloudbric(address _adminAddr) public {
         totalSupply_ = INITIAL_SUPPLY;
 
         balances[msg.sender] = totalSupply_;
@@ -154,6 +154,7 @@ contract CloudbricToken is StandardToken, BurnableToken, Ownable {
         public
         onlyWhenTransferAllowed
         onlyValidDestination(to)
+        onlyAllowedAmount(from, value)
         returns (bool)
     {
         return super.transferFrom(from, to, value);

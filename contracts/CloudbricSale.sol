@@ -1,10 +1,10 @@
 pragma solidity ^0.4.18;
 
-import "./CloudbricToken.sol";
+import "./Cloudbric.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
-contract CloudbricTokenSale is Pausable {
+contract CloudbricSale is Pausable {
     using SafeMath for uint256;
 
     // Start time of sale
@@ -14,7 +14,7 @@ contract CloudbricTokenSale is Pausable {
     // Address to collect fund
     address private fundAddr;
     // Token contract instance
-    CloudbricToken public token;
+    Cloudbric public token;
     // Amount of raised in Wei (1 ether)
     uint256 public totalWeiRaised;
     // Base hard cap for each round in ether
@@ -42,7 +42,8 @@ contract CloudbricTokenSale is Pausable {
     // There are three rounds in sale
     enum SaleRounds {
         EarlyInvestment,
-        PreSale,
+        PreSale1,
+        PreSale2,
         CrowdSale
     }
     // The current round of the sale
@@ -149,12 +150,12 @@ contract CloudbricTokenSale is Pausable {
     }
 
     /*
-     * Constructor for CloudbricTokenSale contract
+     * Constructor for CloudbricSale contract
      *
      * @param fundAddress: Address where funds are collected
      * @param tokenAddress: Address of Cloudbric Token Contract
      */
-    function CloudbricTokenSale(
+    function CloudbricSale(
         address fundAddress,
         address tokenAddress
     )
@@ -163,7 +164,7 @@ contract CloudbricTokenSale is Pausable {
         require(fundAddress != address(0));
         require(tokenAddress != address(0));
 
-        token = CloudbricToken(tokenAddress);
+        token = Cloudbric(tokenAddress);
         fundAddr = fundAddress;
         stage = Stages.Ended;
         round = SaleRounds.EarlyInvestment;
