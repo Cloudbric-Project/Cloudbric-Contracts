@@ -1,18 +1,33 @@
+const Cloudbric = artifacts.require("./Cloudbric.sol");
+const CloudbricSale = artifacts.require("./CloudbricSale.sol");
 
-const CloudbricToken = artifacts.require("./CloudbricToken.sol");
-const CloudbricTokenSale = artifacts.require("./CloudbricTokenSale.sol");
 
-module.exports = async (deployer, network, accounts) => {
+module.exports = function(deployer, network, accounts) {
   const owner = accounts[0];
   const admin = accounts[1];
   const fundAddr = accounts[2];
 
-  await deployer.deploy(CloudbricToken, admin, { from: owner });
-  const cloudbricToken = await CloudbricToken.deployed();
+  let cloudbric = null;
+  let cloudbricSale = null;
 
-  await deployer.deploy(
-    CloudbricTokenSale, fundAddr, cloudbricToken.address, { from: owner }
-  );
-  const cloudbricTokenSale = await CloudbricTokenSale.deployed();
-  await cloudbricToken.setTokenSaleAmount(cloudbricTokenSale.address, 0);
-};
+
+  return deployer.deploy(
+    Cloudbric, admin, { from: owner }
+  ).then(() => {
+    return Cloudbric.deployed().then(instance => {
+        cloudbric = instance;
+        console.log(`Cloudbric delpoyed at \x1b[36m${cloudbric.address}\x1b[0m`);
+    });
+  }).then(() => {
+    return deployer.deploy(
+      CloudbricSale, fundAddr, cloudbric.address, { from: owner }
+    ).then(() => {
+      return CloudbricSale.deployed().then(instance => {
+        cloudbricSale = instance;
+        console.log(`CloudbricSale deployed at \x1b[36m${cloudbricSale.address}\x1b[0m`);
+
+        cloudbric.setTokenSaleAmount(instance.address, 0, { from: owner});
+      });
+    });
+  });
+}
